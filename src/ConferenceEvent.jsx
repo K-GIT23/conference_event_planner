@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./ConferenceEvent.css";
 import TotalCost from "./TotalCost";
+import { incrementAvQuantity, decrementAvQuantity } from "./avSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { incrementQuantity, decrementQuantity } from "./venueSlice";
 import { toggleMealSelection } from "./mealsSlice";
@@ -10,6 +11,7 @@ const ConferenceEvent = () => {
     const [numberOfPeople, setNumberOfPeople] = useState(1);
     const venueItems = useSelector((state) => state.venue);
     const avItems = useSelector((state) => state.av);
+    const mealsItems = useSelector((state) => state.meals);
     const dispatch = useDispatch();
     const remainingAuditoriumQuantity = 3 - venueItems.find(item => item.name === "Auditorium Hall (Capacity:200)").quantity;
     
@@ -41,7 +43,8 @@ const ConferenceEvent = () => {
     };
 
     const handleMealSelection = (index) => {
-       const mealsItems = useSelector((state) => state.meals);
+      // const mealsItems = useSelector((state) => state.meals);  WRONG DETAILS
+       const item = mealsItems[index];
        if (item.selected && item.type === "mealForPeople") {
         // Ensure numberOfPeople is set before toggling selection
         const newNumberOfPeople = item.selected ? numberOfPeople : 0;
@@ -152,6 +155,7 @@ const ConferenceEvent = () => {
         av: avTotalCost,
         meals: mealsTotalCost,
       };
+
 
     return (
         <>
@@ -294,11 +298,9 @@ const ConferenceEvent = () => {
         </div>
     ))}
 
-                                </div>
-                                <div className="total_cost">Total Cost: {mealsTotalCost}</div>
-
-
-                            </div>
+          </div>
+               <div className="total_cost">Total Cost: {mealsTotalCost}</div>                  
+                    </div>
                         </div>
                     ) : (
                         <div className="total_amount_detail">
